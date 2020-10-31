@@ -1,5 +1,3 @@
-class Component {}
-
 class WordList {
   constructor() {
     this.words = [
@@ -35,8 +33,9 @@ class WordList {
   }
 
   getRandomWord() {
-    const randomIndex = Math.floor(Math.random() * this.words.length);
-    const randomWord = this.words[randomIndex];
+    const randomWord = this.words[
+      Math.floor(Math.random() * this.words.length)
+    ];
     this.words = this.words.filter((word) => word != randomWord);
     return randomWord;
   }
@@ -46,51 +45,47 @@ class Grid {
   constructor() {
     this.redCount = 0;
     this.blueCount = 0;
-    this.turn = "blue"; // For now, red always starts
     this.gameOver = false;
+    this.spymasterView = false;
     this.boxes = this.getBoxes();
     this.shuffleBoxes();
-    this.spymasterView = false;
     this.changeTurns();
     this.render();
   }
 
-  shuffleBoxes = () => this.boxes.sort((a, b) => 0.5 - Math.random());
+  shuffleBoxes = () => this.boxes.sort(() => 0.5 - Math.random());
 
   reset() {
     this.redCount = 0;
     this.blueCount = 0;
     this.gameOver = false;
+    this.spymasterView = false;
     this.changeTurns();
-
     this.boxes = this.shuffleBoxes();
 
     const words = new WordList();
-    for (const box of this.boxes) {
-      const randomWord = words.getRandomWord();
-      box.reset(box, randomWord);
-    }
+    this.boxes.forEach((box) => box.reset(box, words.getRandomWord()));
   }
 
   toggleSpymasterView() {
     this.spymasterView = !this.spymasterView;
-    for (const box of this.boxes) {
-      const boxEl = document.getElementById(box.id);
+    this.boxes.forEach((box) =>
+      this.spymasterView ? box.adjustColors(true) : box.removeColors()
+    );
 
-      if (this.spymasterView) {
-        box.adjustColors(boxEl);
-      } else {
-        box.removeColors(boxEl);
-      }
-    }
+    // for (const box of this.boxes) {
+    //   if (this.spymasterView) {
+    //     box.adjustColors(true);
+    //   } else {
+    //     box.removeColors();
+    //   }
+    // }
   }
 
   determineWinner(box) {
     if (this.gameOver) {
       return this.gameOver;
     }
-
-    const boxEl = document.getElementById(box.id);
 
     if (box.type === "black") {
       this.gameOver = true;
@@ -108,7 +103,7 @@ class Grid {
     }
 
     if (this.gameOver) {
-      box.adjustColors(boxEl); // Adjust color of tile one last time before ending game
+      box.adjustColors(); // Adjust color of tile one last time before ending game
     } else {
       this.determineTurnChange(box.type);
     }
@@ -120,14 +115,10 @@ class Grid {
     if (boxType !== this.turn) {
       this.changeTurns();
     }
-  }
+  };
 
   changeTurns() {
-    if (this.turn === "red") {
-      this.turn = "blue";
-    } else {
-      this.turn = "red";
-    }
+    this.turn = this.turn === "red" ? "blue" : "red";
     const turnEl = document.getElementById("turn");
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
     turnEl.innerHTML = `${turnLabel} Team's Turn`;
@@ -140,32 +131,24 @@ class Grid {
     for (let i = 1; i <= 25; i++) {
       const boxId = "box" + i.toString();
       const randomWord = words.getRandomWord();
-      let type;
+      let type = "neutral";
       if (i <= 5) {
         type = "red";
       } else if (i > 5 && i <= 10) {
         type = "blue";
       } else if (i === 25) {
         type = "black";
-      } else {
-        type = "neutral";
       }
 
-      const box = new Box(
-        boxId,
-        randomWord,
-        type,
-        this.determineWinner.bind(this)
+      boxes.push(
+        new Box(boxId, randomWord, type, this.determineWinner.bind(this))
       );
-      boxes.push(box);
     }
     return boxes;
   }
 
   render() {
-    for (const box of this.boxes) {
-      box.render();
-    }
+    this.boxes.forEach((box) => box.render());
   }
 }
 
@@ -181,10 +164,9 @@ class Box {
   boxClickHandler() {
     console.log(this);
     if (!this.disabled) {
-      const boxEl = document.getElementById(this.id);
       const isGameOver = this.determineWinnerHandler(this);
       if (!isGameOver) {
-        this.adjustColors(boxEl);
+        this.adjustColors();
         this.disabled = true;
       } else {
         console.log("Game already over");
@@ -192,11 +174,17 @@ class Box {
     }
   }
 
-  adjustColors(boxEl) {
-    boxEl.classList.add(`box-` + this.type);
+  adjustColors(isSpymaster = false) {
+    const boxEl = document.getElementById(this.id);
+    if (isSpymaster && !this.disabled) {
+      boxEl.classList.add(`box-spymaster-` + this.type);
+    } else {
+      boxEl.classList.add(`box-` + this.type);
+    }
   }
 
-  removeColors(boxEl) {
+  removeColors() {
+    const boxEl = document.getElementById(this.id);
     boxEl.className = "box";
   }
 
