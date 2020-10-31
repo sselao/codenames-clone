@@ -64,18 +64,17 @@ class Grid {
       return this.gameOver;
     }
 
-    const { type } = box;
     const boxEl = document.getElementById(box.id);
 
-    if (type === "black") {
+    if (box.type === "black") {
       this.gameOver = true;
       alert(`${this.turn} Team Loses!`);
-    } else if (type === "red") {
+    } else if (box.type === "red") {
       if (++this.redCount === 5) {
         this.gameOver = true;
         alert("Red Team Wins!");
       }
-    } else if (type === "blue") {
+    } else if (box.type === "blue") {
       if (++this.blueCount === 5) {
         this.gameOver = true;
         alert("Blue Team Wins!");
@@ -85,7 +84,7 @@ class Grid {
     if (this.gameOver) {
       box.adjustColors(boxEl); // Adjust color of tile one last time before ending game
     } else {
-      this.determineTurnChange(type);
+      this.determineTurnChange(box.type);
     }
 
     return this.gameOver;
@@ -167,7 +166,6 @@ class Box {
     boxEl.id = this.id;
     boxEl.className = "box";
     boxEl.innerHTML = this.text;
-
     boxEl.addEventListener("click", this.boxClickHandler.bind(this));
 
     const grid = document.getElementById("grid");
