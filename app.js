@@ -175,15 +175,13 @@ class Box {
 
   reset(box, word) {
     const boxEl = document.getElementById(box.id);
+    const grid = document.getElementById("grid");
+
     box.text = word;
     box.disabled = false;
     boxEl.className = "box";
     boxEl.innerHTML = word;
-
-    const boxEl2 = boxEl.cloneNode();
-    boxEl.remove(); // Does not remove eventListeners
-
-    const grid = document.getElementById("grid");
+    boxEl.remove();
     grid.insertAdjacentElement("beforeend", boxEl);
   }
 
