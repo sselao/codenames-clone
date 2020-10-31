@@ -103,8 +103,9 @@ class Grid {
     } else {
       this.turn = "red";
     }
-    const turnLabel = document.getElementById("turn");
-    turnLabel.innerHTML = `${this.turn} Team's Turn`;
+    const turnEl = document.getElementById("turn");
+    const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
+    turnEl.innerHTML = `${turnLabel} Team's Turn`;
   }
 
   render() {
