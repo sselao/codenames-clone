@@ -48,15 +48,22 @@ class Grid {
     this.blueCount = 0;
     this.turn = "blue"; // For now, red always starts
     this.gameOver = false;
+    this.boxes = [];
     this.changeTurns();
   }
 
   reset() {
     this.redCount = 0;
     this.blueCount = 0;
-    this.turn = "blue"; // For now, red always starts
+    this.turn = "blue";
     this.gameOver = false;
     this.changeTurns();
+
+    const words = new WordList();
+    for (const box of this.boxes) {
+      const randomWord = words.getRandomWord();
+      box.reset(box, randomWord);
+    }
   }
 
   determineWinner(box) {
@@ -130,6 +137,7 @@ class Grid {
         type,
         this.determineWinner.bind(this)
       );
+      this.boxes.push(box);
       box.render();
     }
   }
@@ -145,6 +153,7 @@ class Box {
   }
 
   boxClickHandler() {
+    console.log(this);
     if (!this.disabled) {
       const boxEl = document.getElementById(this.id);
       const isGameOver = this.determineWinnerHandler(this);
@@ -159,6 +168,14 @@ class Box {
 
   adjustColors(boxEl) {
     boxEl.classList.add(`box-` + this.type);
+  }
+
+  reset(box, word) {
+    const boxEl = document.getElementById(box.id);
+    box.text = word;
+    box.disabled = false;
+    boxEl.className = "box";
+    boxEl.innerHTML = word;
   }
 
   render() {
@@ -177,6 +194,12 @@ class App {
   static init() {
     const grid = new Grid();
     grid.render();
+
+    const resetBtn = document.getElementById("reset");
+    resetBtn.addEventListener("click", grid.reset.bind(grid));
+
+    const endTurnBtn = document.getElementById("end-turn");
+    endTurnBtn.addEventListener("click", grid.changeTurns.bind(grid));
   }
 }
 
