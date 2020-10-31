@@ -48,8 +48,11 @@ class Grid {
     this.blueCount = 0;
     this.turn = "blue"; // For now, red always starts
     this.gameOver = false;
-    this.boxes = [];
+    this.boxes = this.getBoxes();
+    this.shuffleBoxes();
+    this.spymasterView = false;
     this.changeTurns();
+    this.render();
   }
 
   shuffleBoxes = () => this.boxes.sort((a, b) => 0.5 - Math.random());
@@ -66,6 +69,19 @@ class Grid {
     for (const box of this.boxes) {
       const randomWord = words.getRandomWord();
       box.reset(box, randomWord);
+    }
+  }
+
+  toggleSpymasterView() {
+    this.spymasterView = !this.spymasterView;
+    for (const box of this.boxes) {
+      const boxEl = document.getElementById(box.id);
+
+      if (this.spymasterView) {
+        box.adjustColors(boxEl);
+      } else {
+        box.removeColors(boxEl);
+      }
     }
   }
 
@@ -117,8 +133,9 @@ class Grid {
     turnEl.innerHTML = `${turnLabel} Team's Turn`;
   }
 
-  render() {
+  getBoxes() {
     const words = new WordList();
+    const boxes = [];
 
     for (let i = 1; i <= 25; i++) {
       const boxId = "box" + i.toString();
@@ -140,7 +157,13 @@ class Grid {
         type,
         this.determineWinner.bind(this)
       );
-      this.boxes.push(box);
+      boxes.push(box);
+    }
+    return boxes;
+  }
+
+  render() {
+    for (const box of this.boxes) {
       box.render();
     }
   }
@@ -173,6 +196,10 @@ class Box {
     boxEl.classList.add(`box-` + this.type);
   }
 
+  removeColors(boxEl) {
+    boxEl.className = "box";
+  }
+
   reset(box, word) {
     const boxEl = document.getElementById(box.id);
     const grid = document.getElementById("grid");
@@ -200,13 +227,15 @@ class Box {
 class App {
   static init() {
     const grid = new Grid();
-    grid.render();
 
     const resetBtn = document.getElementById("reset");
     resetBtn.addEventListener("click", grid.reset.bind(grid));
 
     const endTurnBtn = document.getElementById("end-turn");
     endTurnBtn.addEventListener("click", grid.changeTurns.bind(grid));
+
+    const spymasterBtn = document.getElementById("toggle-spymaster");
+    spymasterBtn.addEventListener("click", grid.toggleSpymasterView.bind(grid));
   }
 }
 
