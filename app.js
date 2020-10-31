@@ -52,12 +52,15 @@ class Grid {
     this.changeTurns();
   }
 
+  shuffleBoxes = () => this.boxes.sort((a, b) => 0.5 - Math.random());
+
   reset() {
     this.redCount = 0;
     this.blueCount = 0;
-    this.turn = "blue";
     this.gameOver = false;
     this.changeTurns();
+
+    this.boxes = this.shuffleBoxes();
 
     const words = new WordList();
     for (const box of this.boxes) {
@@ -176,6 +179,12 @@ class Box {
     box.disabled = false;
     boxEl.className = "box";
     boxEl.innerHTML = word;
+
+    const boxEl2 = boxEl.cloneNode();
+    boxEl.remove(); // Does not remove eventListeners
+
+    const grid = document.getElementById("grid");
+    grid.insertAdjacentElement("beforeend", boxEl);
   }
 
   render() {
