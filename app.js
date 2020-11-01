@@ -91,12 +91,12 @@ class Grid {
       this.gameOver = true;
       alert(`${this.turn} Team Loses!`);
     } else if (box.type === "red") {
-      if (++this.redCount === 5) {
+      if (++this.redCount === 8) {
         this.gameOver = true;
         alert("Red Team Wins!");
       }
     } else if (box.type === "blue") {
-      if (++this.blueCount === 5) {
+      if (++this.blueCount === 8) {
         this.gameOver = true;
         alert("Blue Team Wins!");
       }
@@ -132,9 +132,9 @@ class Grid {
       const boxId = "box" + i.toString();
       const randomWord = words.getRandomWord();
       let type = "neutral";
-      if (i <= 5) {
+      if (i <= 8) {
         type = "red";
-      } else if (i > 5 && i <= 10) {
+      } else if (i > 8 && i <= 16) {
         type = "blue";
       } else if (i === 25) {
         type = "black";
