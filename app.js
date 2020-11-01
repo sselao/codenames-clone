@@ -43,40 +43,56 @@ class WordList {
 
 class Grid {
   constructor() {
-    this.redCount = 0;
-    this.blueCount = 0;
-    this.gameOver = false;
-    this.spymasterView = false;
     this.boxes = this.getBoxes();
-    this.shuffleBoxes();
-    this.changeTurns();
+    this.reset(true);
     this.render();
+  }
+
+  getBoxes() {
+    const words = new WordList();
+    const boxes = [];
+
+    for (let i = 1; i <= 25; i++) {
+      const boxId = "box" + i.toString();
+      const randomWord = words.getRandomWord();
+      let type = "neutral";
+      if (i <= 8) {
+        type = "red";
+      } else if (i > 8 && i <= 16) {
+        type = "blue";
+      } else if (i === 25) {
+        type = "black";
+      }
+
+      boxes.push(
+        new Box(boxId, randomWord, type, this.determineWinner.bind(this))
+      );
+    }
+    return boxes;
   }
 
   shuffleBoxes = () => this.boxes.sort(() => 0.5 - Math.random());
 
-  reset() {
+  reset(firstReset = false) {
+    this.boxes = this.shuffleBoxes();
     this.redCount = 0;
     this.blueCount = 0;
     this.gameOver = false;
     this.spymasterView = false;
     this.changeTurns();
-    this.boxes = this.shuffleBoxes();
+    this.updateScore();
 
-    const words = new WordList();
-    this.boxes.forEach((box) => box.reset(box, words.getRandomWord()));
+    if (!firstReset) {
+      const words = new WordList();
+      this.boxes.forEach((box) => box.reset(box, words.getRandomWord()));
+    }
   }
 
   toggleSpymasterView() {
     this.spymasterView = !this.spymasterView;
-    this.boxes.forEach((box) => {
-      if (this.spymasterView) {
-        box.adjustColors(true);
-      } else {
-        box.removeColors(true);
-        // box.adjustColors(false);
-      }
-    });
+    this.boxes.forEach((box) =>
+      this.spymasterView ? box.adjustColors(true) : box.removeColors(true)
+    );
   }
 
   determineWinner(box) {
@@ -105,7 +121,13 @@ class Grid {
       this.determineTurnChange(box.type);
     }
 
+    this.updateScore();
     return this.gameOver;
+  }
+
+  updateScore() {
+    const scoreEl = document.getElementById("score");
+    scoreEl.innerHTML = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
   determineTurnChange(boxType) {
@@ -119,29 +141,6 @@ class Grid {
     const turnEl = document.getElementById("turn");
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
     turnEl.innerHTML = `${turnLabel} Team's Turn`;
-  }
-
-  getBoxes() {
-    const words = new WordList();
-    const boxes = [];
-
-    for (let i = 1; i <= 25; i++) {
-      const boxId = "box" + i.toString();
-      const randomWord = words.getRandomWord();
-      let type = "neutral";
-      if (i <= 8) {
-        type = "red";
-      } else if (i > 8 && i <= 16) {
-        type = "blue";
-      } else if (i === 25) {
-        type = "black";
-      }
-
-      boxes.push(
-        new Box(boxId, randomWord, type, this.determineWinner.bind(this))
-      );
-    }
-    return boxes;
   }
 
   render = () => this.boxes.forEach((box) => box.render());
@@ -172,9 +171,9 @@ class Box {
   adjustColors(isSpymaster = false) {
     const boxEl = document.getElementById(this.id);
     if (isSpymaster && !this.disabled) {
-      boxEl.classList.add(`box-spymaster-` + this.type);
+      boxEl.classList.add("box-spymaster-" + this.type);
     } else if (!this.disabled) {
-      boxEl.classList.add(`box-` + this.type);
+      boxEl.classList.add("box-" + this.type);
     }
   }
 
@@ -191,16 +190,19 @@ class Box {
     }
   }
 
+  renderToGrid(boxEl) {
+    const grid = document.getElementById("grid");
+    grid.insertAdjacentElement("beforeend", boxEl);
+  }
+
   reset(box, word) {
     const boxEl = document.getElementById(box.id);
-    const grid = document.getElementById("grid");
-
     box.text = word;
     box.disabled = false;
     boxEl.className = "box";
     boxEl.innerHTML = word;
     boxEl.remove();
-    grid.insertAdjacentElement("beforeend", boxEl);
+    this.renderToGrid(boxEl);
   }
 
   render() {
@@ -209,9 +211,7 @@ class Box {
     boxEl.className = "box";
     boxEl.innerHTML = this.text;
     boxEl.addEventListener("click", this.boxClickHandler.bind(this));
-
-    const grid = document.getElementById("grid");
-    grid.insertAdjacentElement("beforeend", boxEl);
+    this.renderToGrid(boxEl);
   }
 }
 
@@ -220,7 +220,7 @@ class App {
     const grid = new Grid();
 
     const resetBtn = document.getElementById("reset");
-    resetBtn.addEventListener("click", grid.reset.bind(grid));
+    resetBtn.addEventListener("click", grid.reset.bind(grid, false));
 
     const endTurnBtn = document.getElementById("end-turn");
     endTurnBtn.addEventListener("click", grid.changeTurns.bind(grid));
