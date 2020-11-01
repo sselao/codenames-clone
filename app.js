@@ -69,17 +69,14 @@ class Grid {
 
   toggleSpymasterView() {
     this.spymasterView = !this.spymasterView;
-    this.boxes.forEach((box) =>
-      this.spymasterView ? box.adjustColors(true) : box.removeColors()
-    );
-
-    // for (const box of this.boxes) {
-    //   if (this.spymasterView) {
-    //     box.adjustColors(true);
-    //   } else {
-    //     box.removeColors();
-    //   }
-    // }
+    this.boxes.forEach((box) => {
+      if (this.spymasterView) {
+        box.adjustColors(true);
+      } else {
+        box.removeColors(true);
+        // box.adjustColors(false);
+      }
+    });
   }
 
   determineWinner(box) {
@@ -115,7 +112,7 @@ class Grid {
     if (boxType !== this.turn) {
       this.changeTurns();
     }
-  };
+  }
 
   changeTurns() {
     this.turn = this.turn === "red" ? "blue" : "red";
@@ -147,9 +144,7 @@ class Grid {
     return boxes;
   }
 
-  render() {
-    this.boxes.forEach((box) => box.render());
-  }
+  render = () => this.boxes.forEach((box) => box.render());
 }
 
 class Box {
@@ -178,14 +173,22 @@ class Box {
     const boxEl = document.getElementById(this.id);
     if (isSpymaster && !this.disabled) {
       boxEl.classList.add(`box-spymaster-` + this.type);
-    } else {
+    } else if (!this.disabled) {
       boxEl.classList.add(`box-` + this.type);
     }
   }
 
-  removeColors() {
+  removeColors(spymasterOnly = false) {
     const boxEl = document.getElementById(this.id);
-    boxEl.className = "box";
+    if (spymasterOnly) {
+      boxEl.className.split(" ").forEach((value) => {
+        if (value.includes("spymaster")) {
+          boxEl.classList.remove(value);
+        }
+      });
+    } else {
+      boxEl.className = "box";
+    }
   }
 
   reset(box, word) {
