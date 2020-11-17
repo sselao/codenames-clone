@@ -1,4 +1,5 @@
-import Grid from './App/Grid';
+import './styles/app.scss';
+import Grid from './scripts/App/Grid';
 
 class App {
   static init() {
