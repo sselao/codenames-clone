@@ -45,11 +45,11 @@ export default class {
     document.getElementById('grid').insertAdjacentElement('beforeend', boxEl);
   }
 
-  reset(box, word) {
-    const boxObject = box;
+  reset(boxObject, word) {
+    const box = boxObject;
     const boxEl = document.getElementById(box.id);
-    boxObject.text = word;
-    boxObject.disabled = false;
+    box.text = word;
+    box.disabled = false;
     boxEl.className = 'box';
     boxEl.innerHTML = word;
     boxEl.remove();
