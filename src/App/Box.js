@@ -1,10 +1,11 @@
-export default class {
+export default class Box {
   constructor(id, text, type, determineWinnerFunction) {
     this.id = id;
     this.text = text;
     this.disabled = false;
     this.type = type;
     this.determineWinnerHandler = determineWinnerFunction;
+    this.grid = document.getElementById('grid');
   }
 
   boxClickHandler() {
@@ -42,7 +43,7 @@ export default class {
   }
 
   renderToGrid(boxEl) {
-    document.getElementById('grid').insertAdjacentElement('beforeend', boxEl);
+    this.grid.insertAdjacentElement('beforeend', boxEl);
   }
 
   reset(boxObject, word) {
