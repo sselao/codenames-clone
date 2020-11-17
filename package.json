@@ -1,0 +1,30 @@
+{
+  "name": "codenames",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "build:dev": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sselao/codenames-clone.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/sselao/codenames-clone/issues"
+  },
+  "homepage": "https://github.com/sselao/codenames-clone#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
