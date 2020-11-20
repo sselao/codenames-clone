@@ -70,11 +70,12 @@ export default class {
     });
   }
 
-  async determineWinner(box) {
+  determineWinner(box) {
     if (this.gameOver) {
       return this.gameOver;
     }
 
+    this.api.guess();
     if (box.type === 'black') {
       this.gameOver = true;
       this.messageEl.textContent = `${this.turn} Team Loses!`;
@@ -99,7 +100,6 @@ export default class {
     }
 
     this.updateScore();
-    await this.api.guess();
     return this.gameOver;
   }
 
