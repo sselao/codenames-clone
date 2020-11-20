@@ -4,19 +4,19 @@
   grid-template-rows: repeat(5, 80px);
   column-gap: 10px;
   row-gap: 10px;
-}
 
-#grid .box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #000000;
-  cursor: pointer;
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    cursor: pointer;
+  }
 }
 
 .box-spymaster-red {
   color: red;
-  color:red;
+  color: red;
 }
 
 .box-spymaster-blue {
