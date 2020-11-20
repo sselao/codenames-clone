@@ -1,11 +1,15 @@
 import WordList from './WordList';
 import Box from './Box';
+import Api from '../Utility/Api';
 
 export default class {
   constructor() {
     this.messageEl = document.getElementById('message');
+    this.gameId = 'dummyGameId';
+    this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
     this.reset(true);
+    this.gameStateInterval(5000);
     this.render();
   }
 
@@ -49,6 +53,12 @@ export default class {
     }
   }
 
+  gameStateInterval(interval) {
+    setInterval(() => {
+      this.api.gameState();
+    }, interval);
+  }
+
   toggleSpymasterView() {
     this.spymasterView = !this.spymasterView;
     this.boxes.forEach((box) => {
@@ -60,7 +70,7 @@ export default class {
     });
   }
 
-  determineWinner(box) {
+  async determineWinner(box) {
     if (this.gameOver) {
       return this.gameOver;
     }
@@ -89,6 +99,7 @@ export default class {
     }
 
     this.updateScore();
+    await this.api.guess();
     return this.gameOver;
   }
 
