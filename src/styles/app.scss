@@ -1,16 +1,22 @@
-#grid {
-  display: grid;
-  grid-template-columns: repeat(5, 120px);
-  grid-template-rows: repeat(5, 80px);
-  column-gap: 10px;
-  row-gap: 10px;
+#game {
+  >div {
+    margin: 2rem 0;
+  }
 
-  .box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #000000;
-    cursor: pointer;
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(5, 120px);
+    grid-template-rows: repeat(5, 80px);
+    column-gap: 10px;
+    row-gap: 10px;
+
+    .box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #000000;
+      cursor: pointer;
+    }
   }
 }
 
