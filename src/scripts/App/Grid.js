@@ -3,6 +3,7 @@ import Box from './Box';
 
 export default class {
   constructor() {
+    this.messageEl = document.getElementById('message');
     this.boxes = this.getBoxes();
     this.reset(true);
     this.render();
@@ -66,18 +67,18 @@ export default class {
 
     if (box.type === 'black') {
       this.gameOver = true;
-      alert(`${this.turn} Team Loses!`);
+      this.messageEl.textContent = `${this.turn} Team Loses!`;
     } else if (box.type === 'red') {
       this.redCount += 1;
       if (this.redCount === 8) {
         this.gameOver = true;
-        alert('Red Team Wins!');
+        this.messageEl.textContent = 'Red Team Wins';
       }
     } else if (box.type === 'blue') {
       this.blueCount += 1;
       if (this.blueCount === 8) {
         this.gameOver = true;
-        alert('Blue Team Wins!');
+        this.messageEl.textContent = 'Blue Team Wins';
       }
     }
 
