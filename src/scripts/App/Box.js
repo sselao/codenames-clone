@@ -52,7 +52,7 @@ export default class Box {
     box.text = word;
     box.disabled = false;
     boxEl.className = 'box';
-    boxEl.innerHTML = word;
+    boxEl.textContent = word;
     boxEl.remove();
     this.renderToGrid(boxEl);
   }
@@ -61,7 +61,7 @@ export default class Box {
     const boxEl = document.createElement('div');
     boxEl.id = this.id;
     boxEl.className = 'box';
-    boxEl.innerHTML = this.text;
+    boxEl.textContent = this.text;
     boxEl.addEventListener('click', this.boxClickHandler.bind(this));
     this.renderToGrid(boxEl);
   }

@@ -105,7 +105,7 @@ export default class {
 
   updateScore() {
     const scoreEl = document.getElementById('score');
-    scoreEl.innerHTML = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
+    scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
   determineTurnChange(boxType) {
@@ -118,7 +118,7 @@ export default class {
     this.turn = this.turn === 'red' ? 'blue' : 'red';
     const turnEl = document.getElementById('turn');
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
-    turnEl.innerHTML = `${turnLabel} Team's Turn`;
+    turnEl.textContent = `${turnLabel} Team's Turn`;
   }
 
   render() {
