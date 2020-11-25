@@ -6,7 +6,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = {
   mode: 'development',
-  entry: './src/app.js',
+  entry: './src/app.ts',
   output: {
     filename: 'app.js',
     path: path.resolve(__dirname, 'assets', 'scripts'),
@@ -23,6 +23,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
@@ -36,6 +41,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.scss'],
+    extensions: ['.js', '.ts', '.tsx', '.scss'],
   },
 };

@@ -1,9 +1,10 @@
 export default class Box {
-  constructor(id, text, type, determineWinnerFunction) {
-    this.id = id;
-    this.text = text;
+  disabled: boolean;
+  determineWinnerHandler: (box: Box) => boolean;
+  grid: HTMLElement;
+
+  constructor(public id: string, public text: string, public type: string, determineWinnerFunction: (box: Box) => boolean) {
     this.disabled = false;
-    this.type = type;
     this.determineWinnerHandler = determineWinnerFunction;
     this.grid = document.getElementById('grid');
   }

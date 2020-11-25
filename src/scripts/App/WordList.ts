@@ -1,4 +1,6 @@
 export default class {
+  words: string[];
+  
   constructor() {
     this.words = [
       'Horse',

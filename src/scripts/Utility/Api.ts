@@ -1,7 +1,8 @@
 export default class {
-  constructor(gameId) {
+  apiUrl: string;
+
+  constructor(public gameId: number) {
     this.apiUrl = 'http://localhost:3000';
-    this.gameId = gameId;
   }
 
   async guess() {

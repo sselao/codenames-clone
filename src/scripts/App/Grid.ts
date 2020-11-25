@@ -3,9 +3,19 @@ import Box from './Box';
 import Api from '../Utility/Api';
 
 export default class {
+  messageEl: HTMLElement;
+  gameId: number;
+  api: Api;
+  boxes: Box[];
+  gameOver: boolean;
+  spymasterView: boolean;
+  redCount: number;
+  blueCount: number;
+  turn: 'red' | 'blue';
+
   constructor() {
     this.messageEl = document.getElementById('message');
-    this.gameId = 'dummyGameId';
+    this.gameId = 9999;
     this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
     this.reset(true);
@@ -53,7 +63,7 @@ export default class {
     }
   }
 
-  gameStateInterval(interval) {
+  gameStateInterval(interval: number) {
     setInterval(() => {
       this.api.gameState();
     }, interval);
@@ -70,7 +80,7 @@ export default class {
     });
   }
 
-  determineWinner(box) {
+  determineWinner(box: Box) {
     if (this.gameOver) {
       return this.gameOver;
     }
