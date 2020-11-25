@@ -7,14 +7,14 @@ export default class {
   gameId: number;
   api: Api;
   boxes: Box[];
-  gameOver: boolean;
-  spymasterView: boolean;
-  redCount: number;
-  blueCount: number;
-  turn: 'red' | 'blue';
+  gameOver!: boolean;
+  spymasterView!: boolean;
+  redCount!: number;
+  blueCount!: number;
+  turn!: 'red' | 'blue';
 
   constructor() {
-    this.messageEl = document.getElementById('message');
+    this.messageEl = document.getElementById('message')!;
     this.gameId = 9999;
     this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
@@ -48,7 +48,7 @@ export default class {
     return boxes;
   }
 
-  reset(firstReset = false) {
+  reset(firstReset: boolean = false) {
     this.shuffleBoxes();
     this.redCount = 0;
     this.blueCount = 0;
@@ -114,11 +114,11 @@ export default class {
   }
 
   updateScore() {
-    const scoreEl = document.getElementById('score');
+    const scoreEl = document.getElementById('score')!;
     scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
-  determineTurnChange(boxType) {
+  determineTurnChange(boxType: string) {
     if (boxType !== this.turn) {
       this.changeTurns();
     }
@@ -126,7 +126,7 @@ export default class {
 
   changeTurns() {
     this.turn = this.turn === 'red' ? 'blue' : 'red';
-    const turnEl = document.getElementById('turn');
+    const turnEl = document.getElementById('turn')!;
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
     turnEl.textContent = `${turnLabel} Team's Turn`;
   }
