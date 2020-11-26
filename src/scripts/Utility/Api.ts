@@ -5,7 +5,7 @@ export default class {
     this.apiUrl = 'http://localhost:3000';
   }
 
-  async guess() {
+  async guess(): Promise<Record<string, unknown>> {
     const url = `${this.apiUrl}/guess`;
     const postData = {
       gameId: this.gameId,
@@ -22,7 +22,7 @@ export default class {
     return responseData;
   }
 
-  async gameState() {
+  async gameState(): Promise<Record<string, unknown>> {
     const url = `${this.apiUrl}/game-state/${this.gameId}`;
     const response = await fetch(url);
     const responseData = await response.json();

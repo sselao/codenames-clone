@@ -7,8 +7,8 @@ export default class Box {
   constructor(public id: string, public text: string, public type: string, determineWinnerFunction: (box: Box) => boolean) {
     this.disabled = false;
     this.determineWinnerHandler = determineWinnerFunction;
-    this.gridEl = document.getElementById('grid')!;
-    this.boxEl = document.createElement('div');
+    this.gridEl = document.getElementById('grid') as HTMLElement;
+    this.boxEl = document.createElement('div') as HTMLElement;
   }
 
   boxClickHandler(): void {

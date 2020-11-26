@@ -14,7 +14,7 @@ export default class {
   turn!: 'red' | 'blue';
 
   constructor() {
-    this.messageEl = document.getElementById('message')!;
+    this.messageEl = document.getElementById('message') as HTMLElement;
     this.gameId = 9999;
     this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
@@ -42,7 +42,7 @@ export default class {
       } else if (i === 25) {
         type = 'black';
       }
-      
+
       boxes.push(new Box(boxId, randomWord, type, this.determineWinner.bind(this)));
     }
     return boxes;
@@ -114,7 +114,7 @@ export default class {
   }
 
   updateScore(): void {
-    const scoreEl = document.getElementById('score')!;
+    const scoreEl = document.getElementById('score') as HTMLElement;
     scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
@@ -126,7 +126,7 @@ export default class {
 
   changeTurns(): void {
     this.turn = this.turn === 'red' ? 'blue' : 'red';
-    const turnEl = document.getElementById('turn')!;
+    const turnEl = document.getElementById('turn') as HTMLElement;
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
     turnEl.textContent = `${turnLabel} Team's Turn`;
   }
