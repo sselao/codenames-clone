@@ -13,6 +13,10 @@ export default class {
   blueCount!: number;
   turn!: 'red' | 'blue';
 
+  get turnLabel():string {
+    return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
+  }
+
   constructor() {
     this.messageEl = document.getElementById('message') as HTMLElement;
     this.gameId = 9999;
@@ -65,7 +69,9 @@ export default class {
 
   gameStateInterval(interval: number): void {
     setInterval(() => {
-      this.api.gameState();
+      if (!this.gameOver) {
+        this.api.gameState();
+      }
     }, interval);
   }
 
@@ -88,7 +94,7 @@ export default class {
     this.api.guess();
     if (box.type === 'black') {
       this.gameOver = true;
-      this.messageEl.textContent = `${this.turn} Team Loses!`;
+      this.messageEl.textContent = `${this.turnLabel} Team Loses!`;
     } else if (box.type === 'red') {
       this.redCount += 1;
       if (this.redCount === 8) {
@@ -127,8 +133,7 @@ export default class {
   changeTurns(): void {
     this.turn = this.turn === 'red' ? 'blue' : 'red';
     const turnEl = document.getElementById('turn') as HTMLElement;
-    const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
-    turnEl.textContent = `${turnLabel} Team's Turn`;
+    turnEl.textContent = `${this.turnLabel} Team's Turn`;
   }
 
   render(): void {
