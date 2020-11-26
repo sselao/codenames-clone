@@ -11,7 +11,7 @@ export default class Box {
     this.boxEl = document.createElement('div');
   }
 
-  boxClickHandler() {
+  boxClickHandler(): void {
     // eslint-disable-next-line no-console
     console.log(this);
     if (!this.disabled) {
@@ -23,7 +23,7 @@ export default class Box {
     }
   }
 
-  adjustColors(isSpymaster: boolean = false) {
+  adjustColors(isSpymaster = false): void {
     if (isSpymaster && !this.disabled) {
       this.boxEl.classList.add(`box-spymaster-${this.type}`);
     } else if (!this.disabled) {
@@ -31,7 +31,7 @@ export default class Box {
     }
   }
 
-  removeColors(spymasterOnly: boolean = false) {
+  removeColors(spymasterOnly = false): void {
     if (spymasterOnly) {
       this.boxEl.className.split(' ').forEach((value) => {
         if (value.includes('spymaster')) {
@@ -43,11 +43,11 @@ export default class Box {
     }
   }
 
-  renderToGrid() {
+  renderToGrid(): void {
     this.gridEl.insertAdjacentElement('beforeend', this.boxEl);
   }
 
-  reset(boxObject: Box, word: string) {
+  reset(boxObject: Box, word: string): void {
     const box = boxObject;
     box.text = word;
     box.disabled = false;
@@ -57,7 +57,7 @@ export default class Box {
     this.renderToGrid();
   }
 
-  render() {
+  render(): void {
     this.boxEl.id = this.id;
     this.boxEl.className = 'box';
     this.boxEl.textContent = this.text;

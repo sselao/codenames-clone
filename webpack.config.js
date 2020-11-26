@@ -9,8 +9,8 @@ module.exports = {
   entry: './src/app.ts',
   output: {
     filename: 'app.js',
-    path: path.resolve(__dirname, 'assets', 'scripts'),
-    publicPath: 'assets/scripts/',
+    path: path.resolve(__dirname, 'dist', 'scripts'),
+    publicPath: 'dist/scripts/',
   },
   devtool: 'cheap-module-source-map',
   plugins: [

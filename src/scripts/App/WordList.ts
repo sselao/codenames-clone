@@ -1,6 +1,6 @@
 export default class {
   words: string[];
-  
+
   constructor() {
     this.words = [
       'Horse',
@@ -34,7 +34,7 @@ export default class {
     ];
   }
 
-  getRandomWord() {
+  getRandomWord(): string {
     const randomWord = this.words[
       Math.floor(Math.random() * this.words.length)
     ];

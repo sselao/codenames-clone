@@ -23,13 +23,13 @@ export default class {
     this.render();
   }
 
-  shuffleBoxes() {
+  shuffleBoxes(): void {
     this.boxes.sort(() => 0.5 - Math.random());
   }
 
-  getBoxes() {
+  getBoxes(): Box[] {
     const words = new WordList();
-    const boxes = [];
+    const boxes: Box[] = [];
 
     for (let i = 1; i <= 25; i += 1) {
       const boxId = `box${i.toString()}`;
@@ -42,13 +42,13 @@ export default class {
       } else if (i === 25) {
         type = 'black';
       }
-
+      
       boxes.push(new Box(boxId, randomWord, type, this.determineWinner.bind(this)));
     }
     return boxes;
   }
 
-  reset(firstReset: boolean = false) {
+  reset(firstReset = false): void {
     this.shuffleBoxes();
     this.redCount = 0;
     this.blueCount = 0;
@@ -63,13 +63,13 @@ export default class {
     }
   }
 
-  gameStateInterval(interval: number) {
+  gameStateInterval(interval: number): void {
     setInterval(() => {
       this.api.gameState();
     }, interval);
   }
 
-  toggleSpymasterView() {
+  toggleSpymasterView(): void {
     this.spymasterView = !this.spymasterView;
     this.boxes.forEach((box) => {
       if (this.spymasterView) {
@@ -80,7 +80,7 @@ export default class {
     });
   }
 
-  determineWinner(box: Box) {
+  determineWinner(box: Box): boolean {
     if (this.gameOver) {
       return this.gameOver;
     }
@@ -113,25 +113,25 @@ export default class {
     return this.gameOver;
   }
 
-  updateScore() {
+  updateScore(): void {
     const scoreEl = document.getElementById('score')!;
     scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
-  determineTurnChange(boxType: string) {
+  determineTurnChange(boxType: string): void {
     if (boxType !== this.turn) {
       this.changeTurns();
     }
   }
 
-  changeTurns() {
+  changeTurns(): void {
     this.turn = this.turn === 'red' ? 'blue' : 'red';
     const turnEl = document.getElementById('turn')!;
     const turnLabel = this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
     turnEl.textContent = `${turnLabel} Team's Turn`;
   }
 
-  render() {
+  render(): void {
     this.boxes.forEach((box) => box.render());
   }
 }
