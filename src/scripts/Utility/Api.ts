@@ -7,12 +7,13 @@ interface GameData {
 export default class {
   apiUrl = 'http://localhost:3000';
 
-  constructor(public gameId: number) {}
+  constructor(public gameId: string) {}
 
-  async guess(): Promise<Record<string, unknown>> {
+  async guess(boxLocation: number): Promise<Record<string, unknown>> {
     const url = `${this.apiUrl}/guess`;
     const postData = {
       gameId: this.gameId,
+      boxLocation: boxLocation,
     };
 
     const response = await fetch(url, {
@@ -23,6 +24,7 @@ export default class {
       body: JSON.stringify(postData),
     });
     const responseData = await response.json();
+    console.log(responseData);
     return responseData;
   }
 

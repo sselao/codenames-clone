@@ -4,7 +4,7 @@ import Api from '../Utility/Api';
 
 export default class {
   messageEl: HTMLElement;
-  gameId: number;
+  gameId: string;
   api: Api;
   boxes: Box[];
   steps!: number;
@@ -20,7 +20,7 @@ export default class {
 
   constructor() {
     this.messageEl = document.getElementById('message') as HTMLElement;
-    this.gameId = 9999;
+    this.gameId = 'randomgameid';
     this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
     this.reset(true);
@@ -101,8 +101,10 @@ export default class {
       return this.gameOver;
     }
 
-    this.api.guess();
+    const boxLocation = this.boxes.findIndex((boxObj) => boxObj === box);
+    this.api.guess(boxLocation);
     this.steps++;
+
     if (box.type === 'black') {
       this.gameOver = true;
       this.messageEl.textContent = `${this.turnLabel} Team Loses!`;
