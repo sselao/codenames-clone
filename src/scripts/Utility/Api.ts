@@ -1,9 +1,13 @@
-export default class {
-  apiUrl: string;
+interface GameData {
+  readonly gameId: string;
+  readonly stepCount: number;
+  readonly steps: number[];
+}
 
-  constructor(public gameId: number) {
-    this.apiUrl = 'http://localhost:3000';
-  }
+export default class {
+  apiUrl = 'http://localhost:3000';
+
+  constructor(public gameId: number) {}
 
   async guess(): Promise<Record<string, unknown>> {
     const url = `${this.apiUrl}/guess`;
@@ -22,11 +26,15 @@ export default class {
     return responseData;
   }
 
-  async gameState(): Promise<Record<string, unknown>> {
+  async gameState(): Promise<GameData> {
     const url = `${this.apiUrl}/game-state/${this.gameId}`;
     const response = await fetch(url);
     const responseData = await response.json();
-    console.log('gameState', responseData);
-    return responseData;
+    const data: GameData = {
+      gameId: responseData.gameId,
+      stepCount: responseData.stepCount,
+      steps: responseData.steps,
+    };
+    return data;
   }
 }

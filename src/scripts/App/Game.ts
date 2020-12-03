@@ -7,13 +7,14 @@ export default class {
   gameId: number;
   api: Api;
   boxes: Box[];
+  steps!: number;
   gameOver!: boolean;
   spymasterView!: boolean;
   redCount!: number;
   blueCount!: number;
   turn!: 'red' | 'blue';
 
-  get turnLabel():string {
+  get turnLabel(): string {
     return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
   }
 
@@ -23,7 +24,6 @@ export default class {
     this.api = new Api(this.gameId);
     this.boxes = this.getBoxes();
     this.reset(true);
-    this.gameStateInterval(5000);
     this.render();
   }
 
@@ -54,12 +54,14 @@ export default class {
 
   reset(firstReset = false): void {
     this.shuffleBoxes();
+    this.steps = 0;
     this.redCount = 0;
     this.blueCount = 0;
     this.gameOver = false;
     this.spymasterView = false;
     this.changeTurns();
     this.updateScore();
+    this.gameStateInterval(5000);
 
     if (!firstReset) {
       const words = new WordList();
@@ -68,9 +70,17 @@ export default class {
   }
 
   gameStateInterval(interval: number): void {
-    setInterval(() => {
-      if (!this.gameOver) {
-        this.api.gameState();
+    const intervalFn = setInterval(async () => {
+      if (this.gameOver) {
+        clearInterval(intervalFn);
+      } else {
+        const gameStateData = await this.api.gameState();
+        if (this.steps < gameStateData.stepCount) {
+          for (let i = this.steps; i < gameStateData.stepCount; i++) {
+            const step: number = gameStateData.steps[i];
+            this.boxes[step].boxClickHandler();
+          }
+        }
       }
     }, interval);
   }
@@ -92,6 +102,7 @@ export default class {
     }
 
     this.api.guess();
+    this.steps++;
     if (box.type === 'black') {
       this.gameOver = true;
       this.messageEl.textContent = `${this.turnLabel} Team Loses!`;
