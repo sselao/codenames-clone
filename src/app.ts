@@ -1,18 +1,18 @@
 import './styles/app.scss';
-import Grid from './scripts/App/Grid';
+import Game from './scripts/App/Game';
 
 class App {
   static init() {
-    const grid = new Grid();
+    const game = new Game();
 
     const resetBtn = document.getElementById('reset') as HTMLButtonElement;
-    resetBtn.addEventListener('click', grid.reset.bind(grid, false));
+    resetBtn.addEventListener('click', game.reset.bind(game, false));
 
     const endTurnBtn = document.getElementById('end-turn') as HTMLButtonElement;
-    endTurnBtn.addEventListener('click', grid.changeTurns.bind(grid));
+    endTurnBtn.addEventListener('click', game.changeTurns.bind(game));
 
     const spymasterBtn = document.getElementById('toggle-spymaster') as HTMLButtonElement;
-    spymasterBtn.addEventListener('click', grid.toggleSpymasterView.bind(grid));
+    spymasterBtn.addEventListener('click', game.toggleSpymasterView.bind(game));
   }
 }
 
