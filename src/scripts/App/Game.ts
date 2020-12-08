@@ -32,6 +32,8 @@ export default class {
   }
 
   private reset(): void {
+    this.messageEl.textContent = '';
+
     clearInterval(this.intervalFn);
     this.round = this.gameData.round;
     this.steps = 0;
