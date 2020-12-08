@@ -20,7 +20,7 @@ module.exports = {
       chunkFilename: '[id].css'
     }),
     new webpack.DefinePlugin({
-      API_URL: JSON.stringify('https://codenames-clone-api.herokuapp.com/'),
+      API_URL: JSON.stringify('https://codenames-clone-api.herokuapp.com'),
     }),
   ],
   module: {
