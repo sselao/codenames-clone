@@ -1,98 +1,95 @@
-import WordList from './WordList';
 import Box from './Box';
-import Api from '../Utility/Api';
+import Api, { GameData } from '../Utility/Api';
 
 export default class {
-  messageEl: HTMLElement;
-  gameId: string;
+  messageEl: HTMLDivElement;
   api: Api;
-  boxes: Box[];
+  boxes: Box[] = [];
   steps!: number;
   gameOver!: boolean;
   spymasterView!: boolean;
   redCount!: number;
   blueCount!: number;
   turn!: 'red' | 'blue';
+  private gameData!: GameData;
 
   get turnLabel(): string {
     return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
   }
 
-  constructor() {
-    this.messageEl = document.getElementById('message') as HTMLElement;
-    this.gameId = 'randomgameid';
+  constructor(public gameId: string) {
+    this.messageEl = document.getElementById('message') as HTMLDivElement;
     this.api = new Api(this.gameId);
-    this.boxes = this.getBoxes();
-    this.reset(true);
-    this.render();
+
+    this.api.gameState().then((data) => {
+      this.gameData = data;
+      this.reset();
+      this.updateGameState(data);
+      this.render();
+    });
   }
 
-  shuffleBoxes(): void {
-    this.boxes.sort(() => 0.5 - Math.random());
-  }
-
-  getBoxes(): Box[] {
-    const words = new WordList();
-    const boxes: Box[] = [];
-
-    for (let i = 1; i <= 25; i += 1) {
-      const boxId = `box${i.toString()}`;
-      const randomWord = words.getRandomWord();
-      let type = 'neutral';
-      if (i <= 8) {
-        type = 'red';
-      } else if (i > 8 && i <= 16) {
-        type = 'blue';
-      } else if (i === 25) {
-        type = 'black';
-      }
-
-      boxes.push(new Box(boxId, randomWord, type, this.determineWinner.bind(this)));
-    }
-    return boxes;
-  }
-
-  reset(firstReset = false): void {
-    this.shuffleBoxes();
+  private reset(): void {
     this.steps = 0;
     this.redCount = 0;
     this.blueCount = 0;
     this.gameOver = false;
     this.spymasterView = false;
+    this.createBoxes();
     this.changeTurns();
     this.updateScore();
     this.gameStateInterval(5000);
+  }
 
-    if (!firstReset) {
-      const words = new WordList();
-      this.boxes.forEach((box) => box.reset(box, words.getRandomWord()));
+  private createBoxes(): void {
+    const createNewBoxes = this.boxes.length === 0 ? true : false;
+
+    for (let i = 0; i < this.gameData.wordSet.length; i += 1) {
+      const word = this.gameData.wordSet[i];
+      const type = this.gameData.layout[i];
+
+      if (createNewBoxes) {
+        this.boxes.push(new Box(`box${i.toString()}`, word, type, this.determineWinner.bind(this)));
+      } else {
+        this.boxes[i].reset(word, type);
+      }
     }
   }
 
-  gameStateInterval(interval: number): void {
+  private updateGameState(data: GameData): void {
+    if (this.steps < data.round) {
+      for (let i = this.steps; i < data.round; i++) {
+        const step: number = data.steps[i];
+        if (step && this.boxes[step]) {
+          this.boxes[step].boxClickHandler();
+        }
+      }
+    }
+  }
+
+  private gameStateInterval(interval: number): void {
     const intervalFn = setInterval(async () => {
       if (this.gameOver) {
         clearInterval(intervalFn);
       } else {
         const gameStateData = await this.api.gameState();
-        if (this.steps < gameStateData.stepCount) {
-          for (let i = this.steps; i < gameStateData.stepCount; i++) {
-            const step: number = gameStateData.steps[i];
-            this.boxes[step].boxClickHandler();
-          }
+        if (gameStateData) {
+          this.gameData = gameStateData;
+          this.updateGameState(gameStateData);
         }
       }
     }, interval);
   }
 
-  toggleSpymasterView(): void {
-    this.spymasterView = !this.spymasterView;
-    this.boxes.forEach((box) => {
-      if (this.spymasterView) {
-        box.adjustColors(true);
-      } else {
-        box.removeColors(true);
-      }
+  private updateScore(): void {
+    const scoreEl = document.getElementById('score') as HTMLDivElement;
+    scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
+  }
+
+  newGame(): void {
+    this.api.newGame().then((data: GameData) => {
+      this.gameData = data;
+      this.reset();
     });
   }
 
@@ -124,6 +121,7 @@ export default class {
 
     if (this.gameOver) {
       box.adjustColors(); // Adjust color of tile one last time before ending game
+      this.toggleSpymasterView();
     } else {
       this.determineTurnChange(box.type);
     }
@@ -132,21 +130,29 @@ export default class {
     return this.gameOver;
   }
 
-  updateScore(): void {
-    const scoreEl = document.getElementById('score') as HTMLElement;
-    scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
-  }
-
-  determineTurnChange(boxType: string): void {
+  private determineTurnChange(boxType: string): void {
     if (boxType !== this.turn) {
       this.changeTurns();
     }
   }
 
   changeTurns(): void {
-    this.turn = this.turn === 'red' ? 'blue' : 'red';
-    const turnEl = document.getElementById('turn') as HTMLElement;
-    turnEl.textContent = `${this.turnLabel} Team's Turn`;
+    if (!this.gameOver) {
+      this.turn = this.turn === 'red' ? 'blue' : 'red';
+      const turnEl = document.getElementById('turn') as HTMLElement;
+      turnEl.textContent = `${this.turnLabel} Team's Turn`;
+    }
+  }
+
+  toggleSpymasterView(): void {
+    this.spymasterView = !this.spymasterView;
+    this.boxes.forEach((box) => {
+      if (this.spymasterView) {
+        box.adjustColors(true);
+      } else {
+        box.removeColors(true);
+      }
+    });
   }
 
   render(): void {

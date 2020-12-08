@@ -1,19 +1,17 @@
 export default class Box {
   disabled: boolean;
   determineWinnerHandler: (box: Box) => boolean;
-  gridEl: HTMLElement;
-  boxEl: HTMLElement;
+  gridEl: HTMLDivElement;
+  boxEl: HTMLDivElement;
 
   constructor(public id: string, public text: string, public type: string, determineWinnerFunction: (box: Box) => boolean) {
     this.disabled = false;
     this.determineWinnerHandler = determineWinnerFunction;
-    this.gridEl = document.getElementById('grid') as HTMLElement;
-    this.boxEl = document.createElement('div') as HTMLElement;
+    this.gridEl = document.getElementById('grid') as HTMLDivElement;
+    this.boxEl = document.createElement('div') as HTMLDivElement;
   }
 
   boxClickHandler(): void {
-    // eslint-disable-next-line no-console
-    console.log(this);
     if (!this.disabled) {
       const isGameOver = this.determineWinnerHandler(this);
       if (!isGameOver) {
@@ -43,23 +41,21 @@ export default class Box {
     }
   }
 
-  renderToGrid(): void {
+  private renderToGrid(): void {
     this.gridEl.insertAdjacentElement('beforeend', this.boxEl);
   }
 
-  reset(boxObject: Box, word: string): void {
-    const box = boxObject;
-    box.text = word;
-    box.disabled = false;
+  reset(word: string, type: string): void {
+    this.disabled = false;
+    this.text = word;
+    this.type = type;
     this.boxEl.className = 'box';
     this.boxEl.textContent = word;
-    this.boxEl.remove();
-    this.renderToGrid();
   }
 
   render(): void {
     this.boxEl.id = this.id;
-    this.boxEl.className = 'box';
+    this.boxEl.classList.add('box');
     this.boxEl.textContent = this.text;
     this.boxEl.addEventListener('click', this.boxClickHandler.bind(this));
     this.renderToGrid();
