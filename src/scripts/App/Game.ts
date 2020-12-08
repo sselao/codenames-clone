@@ -32,6 +32,7 @@ export default class {
   }
 
   private reset(): void {
+    clearInterval(this.intervalFn);
     this.round = this.gameData.round;
     this.steps = 0;
     this.redCount = 0;
@@ -62,7 +63,6 @@ export default class {
   private updateGameState(data: GameData): void {
     if (this.round !== data.round) {
       this.gameData = data;
-      clearInterval(this.intervalFn);
       this.reset();
     }
 
