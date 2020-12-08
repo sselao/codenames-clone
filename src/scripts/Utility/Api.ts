@@ -1,11 +1,10 @@
 export interface GameData {
   readonly gameId: string;
-  readonly round: number;
+  readonly round: Date;
   readonly steps: number[];
   readonly wordSet: string[];
   readonly layout: string[];
   readonly revealed: boolean[];
-  // turn
 }
 
 declare const API_URL: string;
@@ -30,7 +29,6 @@ export default class {
       body: JSON.stringify(postData),
     });
     const responseData = await response.json();
-    console.log(responseData);
     return responseData;
   }
 

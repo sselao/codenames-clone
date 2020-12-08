@@ -6,12 +6,14 @@ export default class {
   api: Api;
   boxes: Box[] = [];
   steps!: number;
+  round: Date;
   gameOver!: boolean;
   spymasterView!: boolean;
   redCount!: number;
   blueCount!: number;
   turn!: 'red' | 'blue';
   private gameData!: GameData;
+  private intervalFn!: NodeJS.Timeout;
 
   get turnLabel(): string {
     return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
@@ -20,7 +22,7 @@ export default class {
   constructor(public gameId: string) {
     this.messageEl = document.getElementById('message') as HTMLDivElement;
     this.api = new Api(this.gameId);
-
+    this.round = new Date();
     this.api.gameState().then((data) => {
       this.gameData = data;
       this.reset();
@@ -30,6 +32,7 @@ export default class {
   }
 
   private reset(): void {
+    this.round = this.gameData.round;
     this.steps = 0;
     this.redCount = 0;
     this.blueCount = 0;
@@ -57,8 +60,14 @@ export default class {
   }
 
   private updateGameState(data: GameData): void {
-    if (this.steps < data.round) {
-      for (let i = this.steps; i < data.round; i++) {
+    if (this.round !== data.round) {
+      this.gameData = data;
+      clearInterval(this.intervalFn);
+      this.reset();
+    }
+
+    if (this.steps < data.steps.length) {
+      for (let i = this.steps; i < data.steps.length; i++) {
         const step: number = data.steps[i];
         if (step && this.boxes[step]) {
           this.boxes[step].boxClickHandler();
@@ -68,9 +77,9 @@ export default class {
   }
 
   private gameStateInterval(interval: number): void {
-    const intervalFn = setInterval(async () => {
+    this.intervalFn = setInterval(async () => {
       if (this.gameOver) {
-        clearInterval(intervalFn);
+        clearInterval(this.intervalFn);
       } else {
         const gameStateData = await this.api.gameState();
         if (gameStateData) {
