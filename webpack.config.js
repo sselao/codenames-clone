@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
@@ -7,12 +8,15 @@ module.exports = {
   mode: 'development',
   entry: './src/app.ts',
   output: {
-    filename: 'app.js',
-    path: path.resolve(__dirname, 'dist', 'scripts'),
-    publicPath: 'dist/scripts/',
+    filename: '[name].js',
+    path: path.resolve(__dirname, './dist'),
   },
   devtool: 'cheap-module-source-map',
   plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Codenames DEV MODE',
+      template: path.join(__dirname, './index.html'),
+    }),
     new CleanPlugin.CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
@@ -31,14 +35,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
-          'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
