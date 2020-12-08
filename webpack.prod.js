@@ -4,22 +4,23 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/app.ts',
   output: {
     filename: 'app.js',
     path: path.resolve(__dirname, 'dist', 'scripts'),
     publicPath: 'dist/scripts/',
   },
-  devtool: 'cheap-module-source-map',
   plugins: [
     new CleanPlugin.CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
+      // filename: '[name].[hash].css',
+      // chunkFilename: '[id].[hash].css',
       filename: '[name].css',
-      chunkFilename: '[id].css',
+      chunkFilename: '[id].css'
     }),
     new webpack.DefinePlugin({
-      API_URL: JSON.stringify('http://localhost:3000'),
+      API_URL: JSON.stringify('https://codenames-clone-api.herokuapp.com/'),
     }),
   ],
   module: {
@@ -32,11 +33,8 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
           'style-loader',
-          // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
           'sass-loader',
         ],
       },

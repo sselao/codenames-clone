@@ -8,8 +8,10 @@ export interface GameData {
   // turn
 }
 
+declare const API_URL: string;
+
 export default class {
-  apiUrl = process.env.API_URL || 'http://localhost:3000';
+  apiUrl: string = API_URL;
 
   constructor(public gameId: string) {}
 
