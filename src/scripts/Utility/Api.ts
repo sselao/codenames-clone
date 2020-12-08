@@ -9,7 +9,7 @@ export interface GameData {
 }
 
 export default class {
-  apiUrl = 'http://localhost:3000';
+  apiUrl = process.env.API_URL || 'http://localhost:3000';
 
   constructor(public gameId: string) {}
 
@@ -34,10 +34,10 @@ export default class {
 
   async newGame(): Promise<GameData> {
     const url = `${this.apiUrl}/new-game/${this.gameId}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { method: 'POST' });
     const responseData = await response.json();
     const data: GameData = {
-      gameId: responseData.gameId,
+      gameId: responseData.id,
       round: responseData.round,
       steps: responseData.steps,
       wordSet: responseData.wordSet,
@@ -51,15 +51,15 @@ export default class {
     const url = `${this.apiUrl}/game-state/${this.gameId}`;
     const response = await fetch(url);
     const responseData = await response.json();
-    console.log(responseData);
     const data: GameData = {
-      gameId: responseData.gameId,
+      gameId: responseData.id,
       round: responseData.round,
       steps: responseData.steps,
       wordSet: responseData.wordSet,
       layout: responseData.layout,
       revealed: responseData.revealed,
     };
+    console.log(data);
     return data;
   }
 }
