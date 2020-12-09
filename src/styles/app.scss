@@ -1,57 +1,112 @@
+$colors: (
+  'primary': #007bff,
+  'secondary': #6c757d,
+  'success': #28a745,
+  'danger': #dc3545,
+  'warning': #ffc107,
+  'light': #f8f9fa,
+  'dark': #343a40,
+  'muted': #6c757d,
+);
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  background-color: #f3f3f3;
+}
+
+#info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+
+  div {
+    font-size: 1.05rem;
+    font-weight: bold;
+    padding: 1.5rem;
+  }
+}
+
 #game {
-  >div {
+  > div {
     margin: 2rem 0;
   }
 
   #grid {
     display: grid;
-    grid-template-columns: repeat(5, 120px);
-    grid-template-rows: repeat(5, 80px);
-    column-gap: 10px;
-    row-gap: 10px;
+    grid-template-columns: repeat(5, minmax(100px, 18vw));
+    grid-template-rows: repeat(5, minmax(80px, 100px));
+    column-gap: 1vw;
+    row-gap: 1vw;
 
     .box {
+      font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #000000;
+      border: 1px solid #ccc;
+      background-color: #fff;
       cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 12px rgba(33, 33, 33, 0.2);
+        background-color: darken(#fff, 3);
+      }
+
+      &.box-spymaster-red {
+        color: map-get($colors, 'danger');
+      }
+
+      &.box-spymaster-blue {
+        color: blue;
+      }
+
+      &.box-spymaster-neutral {
+        color: darkgray;
+      }
+
+      &.box-spymaster-black {
+        color: #000000;
+      }
+
+      &.box-red {
+        background-color: red;
+        color: #fff;
+      }
+
+      &.box-blue {
+        background-color: blue;
+        color: #fff;
+      }
+
+      &.box-neutral {
+        background-color: lightgray;
+      }
+
+      &.box-black {
+        background-color: #000000;
+        color: #fff;
+      }
     }
   }
 }
 
-.box-spymaster-red {
-  color: red;
-  color: red;
-}
+#buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 
-.box-spymaster-blue {
-  color: blue;
-}
+  button {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    background-color: map-get($colors, 'secondary');
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 5px;
 
-.box-spymaster-neutral {
-  color: darkgray;
-}
-
-.box-spymaster-black {
-  color: #000000;
-}
-
-.box-red {
-  background-color: red;
-  color: #fff;
-}
-
-.box-blue {
-  background-color: blue;
-  color: #fff;
-}
-
-.box-neutral {
-  background-color: lightgray;
-}
-
-.box-black {
-  background-color: #000000;
-  color: #ffffff;
+    &:hover {
+      cursor: pointer;
+      background-color: darken(map-get($colors, 'secondary'), 20);
+    }
+  }
 }
