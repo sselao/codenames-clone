@@ -15,11 +15,18 @@ export default class {
   private gameData!: GameData;
   private intervalFn!: NodeJS.Timeout;
 
-  get turnLabel(): string {
+  private get url(): string {
+    return `${window.location.protocol}://${window.location.host}/${this.gameId}`;
+  }
+
+  private get turnLabel(): string {
     return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
   }
 
   constructor(public gameId: string) {
+    const shareEl = document.getElementById('share-url') as HTMLInputElement;
+    shareEl.value = this.url;
+
     this.messageEl = document.getElementById('message') as HTMLDivElement;
     this.api = new Api(this.gameId);
     this.round = new Date();

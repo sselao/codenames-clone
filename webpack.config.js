@@ -26,6 +26,13 @@ module.exports = {
       API_URL: JSON.stringify('http://localhost:3000'),
     }),
   ],
+  devServer: {
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/$/, to: '/index.html' },
+      ]
+    }
+  },
   module: {
     rules: [
       {

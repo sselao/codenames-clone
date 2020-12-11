@@ -3,8 +3,15 @@ import Game from './scripts/App/Game';
 
 class App {
   static init() {
-    const game = new Game('randomgameid');
+    const pathName = window.location.pathname.slice(1);
+    let gameId: string = pathName.replace(/[^a-z\d]+/i, ''); // only allow letters and numbers
 
+    if (!gameId || pathName !== (gameId)) {
+      gameId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      window.location.pathname = gameId;
+    }
+
+    const game = new Game(gameId);
     const resetBtn = document.getElementById('reset') as HTMLButtonElement;
     resetBtn.addEventListener('click', game.newGame.bind(game));
 
