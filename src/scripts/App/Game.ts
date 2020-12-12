@@ -51,7 +51,7 @@ export default class {
     this.createBoxes();
     this.changeTurns();
     this.updateScore();
-    this.gameStateInterval(5000);
+    this.gameStateInterval(3000);
   }
 
   private createBoxes(): void {
