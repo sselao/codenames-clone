@@ -59,7 +59,6 @@ export default class {
       layout: responseData.layout,
       revealed: responseData.revealed,
     };
-    console.log(data);
     return data;
   }
 }
