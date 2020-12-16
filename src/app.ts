@@ -16,7 +16,7 @@ class App {
     resetBtn.addEventListener('click', game.newGame.bind(game));
 
     const endTurnBtn = document.getElementById('end-turn') as HTMLButtonElement;
-    endTurnBtn.addEventListener('click', game.changeTurns.bind(game));
+    endTurnBtn.addEventListener('click', game.changeTurns.bind(game, true));
 
     const spymasterBtn = document.getElementById('toggle-spymaster') as HTMLButtonElement;
     spymasterBtn.addEventListener('click', game.toggleSpymasterView.bind(game, spymasterBtn));

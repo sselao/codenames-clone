@@ -1,6 +1,7 @@
 export interface GameData {
   readonly gameId: string;
   readonly round: Date;
+  readonly turn: 'red' | 'blue';
   readonly steps: number[];
   readonly wordSet: string[];
   readonly layout: string[];
@@ -32,6 +33,25 @@ export default class {
     return responseData;
   }
 
+  async changeTurns(turn: 'red' | 'blue'): Promise<Record<string, unknown>> {
+    const url = `${this.apiUrl}/change-turns`;
+    const postData = {
+      gameId: this.gameId,
+      turn: turn,
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    });
+    const responseData = await response.json();
+    return responseData;
+  }
+
+
   async newGame(): Promise<GameData> {
     const url = `${this.apiUrl}/new-game/${this.gameId}`;
     const response = await fetch(url, { method: 'POST' });
@@ -39,6 +59,7 @@ export default class {
     const data: GameData = {
       gameId: responseData.id,
       round: responseData.round,
+      turn: responseData.turn,
       steps: responseData.steps,
       wordSet: responseData.wordSet,
       layout: responseData.layout,
@@ -54,6 +75,7 @@ export default class {
     const data: GameData = {
       gameId: responseData.id,
       round: responseData.round,
+      turn: responseData.turn,
       steps: responseData.steps,
       wordSet: responseData.wordSet,
       layout: responseData.layout,

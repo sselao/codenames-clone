@@ -76,11 +76,18 @@ export default class {
       this.reset();
     }
 
+    this.turn = data.turn;
+    this.updateTurnLabel();
     if (this.steps < data.steps.length) {
       for (let i = this.steps; i < data.steps.length; i++) {
         const step: number = data.steps[i];
         if (step && this.boxes[step]) {
-          this.boxes[step].boxClickHandler();
+          const box = this.boxes[step];
+          const isGameOver = this.determineWinner(box, false);
+          if (!isGameOver) {
+            box.adjustColors();
+            box.disabled = true;
+          }
         }
       }
     }
@@ -112,13 +119,15 @@ export default class {
     });
   }
 
-  determineWinner(box: Box): boolean {
+  determineWinner(box: Box, isRealGuess = true): boolean {
     if (this.gameOver) {
       return this.gameOver;
     }
 
     const boxLocation = this.boxes.findIndex((boxObj) => boxObj === box);
-    this.api.guess(boxLocation);
+    if (isRealGuess) {
+      this.api.guess(boxLocation);
+    }
     this.steps++;
 
     if (box.type === 'black') {
@@ -141,7 +150,7 @@ export default class {
     if (this.gameOver) {
       box.adjustColors(); // Adjust color of tile one last time before ending game
       this.toggleSpymasterView();
-    } else {
+    } else if (isRealGuess) {
       this.determineTurnChange(box.type);
     }
 
@@ -155,12 +164,19 @@ export default class {
     }
   }
 
-  changeTurns(): void {
+  changeTurns(updateServer = false): void {
     if (!this.gameOver) {
       this.turn = this.turn === 'red' ? 'blue' : 'red';
-      const turnEl = document.getElementById('turn') as HTMLElement;
-      turnEl.textContent = `${this.turnLabel} Team's Turn`;
+      this.updateTurnLabel();
+      if (updateServer) {
+        this.api.changeTurns(this.turn);
+      }
     }
+  }
+
+  updateTurnLabel(): void {
+    const turnEl = document.getElementById('turn') as HTMLElement;
+    turnEl.textContent = `${this.turnLabel} Team's Turn`;
   }
 
   toggleSpymasterView(): void {
