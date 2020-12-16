@@ -35,13 +35,12 @@ export default class {
       this.reset();
       this.updateGameState(data);
       this.render();
+      this.gameStateInterval(2250);
     });
   }
 
   private reset(): void {
     this.messageEl.textContent = '';
-
-    clearInterval(this.intervalFn);
     this.round = this.gameData.round;
     this.steps = 0;
     this.redCount = 0;
@@ -52,7 +51,6 @@ export default class {
     this.createBoxes();
     this.changeTurns();
     this.updateScore();
-    this.gameStateInterval(3000);
   }
 
   private createBoxes(): void {
@@ -95,14 +93,10 @@ export default class {
 
   private gameStateInterval(interval: number): void {
     this.intervalFn = setInterval(async () => {
-      if (this.gameOver) {
-        clearInterval(this.intervalFn);
-      } else {
-        const gameStateData = await this.api.gameState();
-        if (gameStateData) {
-          this.gameData = gameStateData;
-          this.updateGameState(gameStateData);
-        }
+      const gameStateData = await this.api.gameState();
+      if (gameStateData) {
+        this.gameData = gameStateData;
+        this.updateGameState(gameStateData);
       }
     }, interval);
   }
@@ -168,7 +162,7 @@ export default class {
     const turnEl = document.getElementById('turn') as HTMLElement;
     turnEl.textContent = `${this.turnLabel} Team's Turn`;
   }
-  
+
   changeTurns(updateServer = false): void {
     if (!this.gameOver) {
       this.turn = this.turn === 'red' ? 'blue' : 'red';
