@@ -103,10 +103,15 @@ body {
     color: #fff;
     border: 1px solid transparent;
     border-radius: 5px;
+    outline: none;
 
     &:hover {
       cursor: pointer;
       background-color: darken(map-get($colors, 'secondary'), 20);
+    }
+
+    &.active {
+      background-color: map-get($colors, 'success');
     }
   }
 }

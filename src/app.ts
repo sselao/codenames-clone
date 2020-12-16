@@ -19,7 +19,7 @@ class App {
     endTurnBtn.addEventListener('click', game.changeTurns.bind(game));
 
     const spymasterBtn = document.getElementById('toggle-spymaster') as HTMLButtonElement;
-    spymasterBtn.addEventListener('click', game.toggleSpymasterView.bind(game));
+    spymasterBtn.addEventListener('click', game.toggleSpymasterView.bind(game, spymasterBtn));
   }
 }
 

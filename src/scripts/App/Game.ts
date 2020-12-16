@@ -165,6 +165,8 @@ export default class {
 
   toggleSpymasterView(): void {
     this.spymasterView = !this.spymasterView;
+    const spymasterBtn = document.getElementById('toggle-spymaster') as HTMLButtonElement;
+    spymasterBtn.classList.toggle('active');
     this.boxes.forEach((box) => {
       if (this.spymasterView) {
         box.adjustColors(true);
