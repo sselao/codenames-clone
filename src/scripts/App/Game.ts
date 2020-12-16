@@ -13,7 +13,6 @@ export default class {
   blueCount!: number;
   turn!: 'red' | 'blue';
   private gameData!: GameData;
-  private intervalFn!: NodeJS.Timeout;
 
   private get url(): string {
     return `${window.location.protocol}://${window.location.host}/${this.gameId}`;
@@ -79,7 +78,7 @@ export default class {
     if (this.steps < data.steps.length) {
       for (let i = this.steps; i < data.steps.length; i++) {
         const step: number = data.steps[i];
-        if (step && this.boxes[step]) {
+        if (typeof step !== undefined && this.boxes[step]) {
           const box = this.boxes[step];
           const isGameOver = this.determineWinner(box, false);
           if (!isGameOver) {
@@ -92,7 +91,7 @@ export default class {
   }
 
   private gameStateInterval(interval: number): void {
-    this.intervalFn = setInterval(async () => {
+    setInterval(async () => {
       const gameStateData = await this.api.gameState();
       if (gameStateData) {
         this.gameData = gameStateData;
