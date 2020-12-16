@@ -164,6 +164,11 @@ export default class {
     }
   }
 
+  private updateTurnLabel(): void {
+    const turnEl = document.getElementById('turn') as HTMLElement;
+    turnEl.textContent = `${this.turnLabel} Team's Turn`;
+  }
+  
   changeTurns(updateServer = false): void {
     if (!this.gameOver) {
       this.turn = this.turn === 'red' ? 'blue' : 'red';
@@ -172,11 +177,6 @@ export default class {
         this.api.changeTurns(this.turn);
       }
     }
-  }
-
-  updateTurnLabel(): void {
-    const turnEl = document.getElementById('turn') as HTMLElement;
-    turnEl.textContent = `${this.turnLabel} Team's Turn`;
   }
 
   toggleSpymasterView(): void {

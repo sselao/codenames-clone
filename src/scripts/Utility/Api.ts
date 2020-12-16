@@ -12,6 +12,7 @@ declare const API_URL: string;
 
 export default class {
   apiUrl: string = API_URL;
+  headers = { 'Content-Type': 'application/json' };
 
   constructor(public gameId: string) {}
 
@@ -24,16 +25,14 @@ export default class {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this.headers,
       body: JSON.stringify(postData),
     });
     const responseData = await response.json();
     return responseData;
   }
 
-  async changeTurns(turn: 'red' | 'blue'): Promise<Record<string, unknown>> {
+  async changeTurns(turn: 'red' | 'blue'): Promise<void> {
     const url = `${this.apiUrl}/change-turns`;
     const postData = {
       gameId: this.gameId,
@@ -42,15 +41,11 @@ export default class {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this.headers,
       body: JSON.stringify(postData),
     });
-    const responseData = await response.json();
-    return responseData;
+    await response.json();
   }
-
 
   async newGame(): Promise<GameData> {
     const url = `${this.apiUrl}/new-game/${this.gameId}`;

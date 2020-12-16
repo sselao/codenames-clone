@@ -1,13 +1,13 @@
 export default class Box {
   disabled: boolean;
   determineWinnerHandler: (box: Box) => boolean;
-  gridEl: HTMLDivElement;
+  gameEl: HTMLDivElement;
   boxEl: HTMLDivElement;
 
   constructor(public id: string, public text: string, public type: string, determineWinnerFunction: (box: Box) => boolean) {
     this.disabled = false;
     this.determineWinnerHandler = determineWinnerFunction;
-    this.gridEl = document.getElementById('grid') as HTMLDivElement;
+    this.gameEl = document.getElementById('grid') as HTMLDivElement;
     this.boxEl = document.createElement('div') as HTMLDivElement;
   }
 
@@ -41,8 +41,8 @@ export default class Box {
     }
   }
 
-  private renderToGrid(): void {
-    this.gridEl.insertAdjacentElement('beforeend', this.boxEl);
+  private append(): void {
+    this.gameEl.insertAdjacentElement('beforeend', this.boxEl);
   }
 
   reset(word: string, type: string): void {
@@ -58,6 +58,6 @@ export default class Box {
     this.boxEl.classList.add('box');
     this.boxEl.textContent = this.text;
     this.boxEl.addEventListener('click', this.boxClickHandler.bind(this));
-    this.renderToGrid();
+    this.append();
   }
 }
