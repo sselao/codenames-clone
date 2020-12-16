@@ -48,6 +48,7 @@ export default class {
     this.blueCount = 0;
     this.gameOver = false;
     this.spymasterView = false;
+    this.turn = 'blue';
     this.createBoxes();
     this.changeTurns();
     this.updateScore();
@@ -131,7 +132,7 @@ export default class {
       }
     } else if (box.type === 'blue') {
       this.blueCount += 1;
-      if (this.blueCount === 8) {
+      if (this.blueCount === 7) {
         this.gameOver = true;
         this.messageEl.textContent = 'Blue Team Wins';
       }
