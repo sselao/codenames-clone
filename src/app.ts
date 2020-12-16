@@ -6,14 +6,18 @@ class App {
     const pathName = window.location.pathname.slice(1);
     let gameId: string = pathName.replace(/[^a-z\d]+/i, ''); // only allow letters and numbers
 
-    if (!gameId || pathName !== (gameId)) {
-      gameId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    if (!gameId || pathName !== gameId) {
+      gameId =
+        Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       window.location.pathname = gameId;
     }
 
     const game = new Game(gameId);
+    const langSelect = document.getElementById('language-selector') as HTMLSelectElement;
+    langSelect.addEventListener('change', game.newGameHandler.bind(game, langSelect));
+
     const resetBtn = document.getElementById('reset') as HTMLButtonElement;
-    resetBtn.addEventListener('click', game.newGame.bind(game));
+    resetBtn.addEventListener('click', game.newGameHandler.bind(game, langSelect));
 
     const endTurnBtn = document.getElementById('end-turn') as HTMLButtonElement;
     endTurnBtn.addEventListener('click', game.changeTurns.bind(game, true));

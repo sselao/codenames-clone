@@ -22,7 +22,7 @@ export default class {
     return this.turn.charAt(0).toUpperCase() + this.turn.slice(1);
   }
 
-  constructor(public gameId: string) {
+  constructor(public gameId: string, public lang = 'en') {
     const shareEl = document.getElementById('share-url') as HTMLInputElement;
     shareEl.value = this.url;
 
@@ -105,11 +105,18 @@ export default class {
     scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
-  newGame(): void {
+  private newGame(): void {
     this.api.newGame().then((data: GameData) => {
       this.gameData = data;
       this.reset();
     });
+  }
+
+  newGameHandler(langSelect: HTMLSelectElement): void {
+    const lang = langSelect.value;
+    this.lang = lang;
+    this.api.setLang(lang);
+    this.newGame();
   }
 
   determineWinner(box: Box, isRealGuess = true): boolean {
