@@ -29,13 +29,23 @@ export default class {
     this.messageEl = document.getElementById('message') as HTMLDivElement;
     this.api = new Api(this.gameId);
     this.round = new Date();
-    this.api.gameState().then((data) => {
-      this.gameData = data;
-      this.reset();
-      this.updateGameState(data);
-      this.render();
-      this.gameStateInterval(2250);
-    });
+    this.api
+      .gameState()
+      .then((data) => {
+        this.gameData = data;
+        this.reset();
+        this.updateGameState(data);
+        this.render();
+        this.gameStateInterval(2250);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert('Something went wrong, please reload the page!');
+      })
+      .finally(() => {
+        const backdrop = document.getElementById('backdrop') as HTMLDivElement;
+        backdrop.style.display = 'none';
+      });
   }
 
   private reset(): void {
