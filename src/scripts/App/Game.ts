@@ -80,8 +80,8 @@ export default class {
         const step: number = data.steps[i];
         if (typeof step !== undefined && this.boxes[step]) {
           const box = this.boxes[step];
-          const isGameOver = this.determineWinner(box, false);
-          if (!isGameOver) {
+          const shouldUpdate = this.determineWinner(box, false);
+          if (shouldUpdate) {
             box.adjustColors();
             box.disabled = true;
           }
