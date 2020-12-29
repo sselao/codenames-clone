@@ -149,7 +149,9 @@ export default class {
 
     if (this.gameOver) {
       box.adjustColors(); // Adjust color of tile one last time before ending game
-      this.toggleSpymasterView();
+      if (!this.spymasterView) {
+        this.toggleSpymasterView();
+      }
     } else if (isRealGuess) {
       this.determineTurnChange(box.type);
     }
