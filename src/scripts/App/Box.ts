@@ -13,8 +13,8 @@ export default class Box {
 
   boxClickHandler(): void {
     if (!this.disabled) {
-      const isGameOver = this.determineWinnerHandler(this);
-      if (!isGameOver) {
+      const shouldUpdate = this.determineWinnerHandler(this);
+      if (shouldUpdate) {
         this.adjustColors();
         this.disabled = true;
       }

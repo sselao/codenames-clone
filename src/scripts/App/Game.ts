@@ -120,8 +120,8 @@ export default class {
   }
 
   determineWinner(box: Box, isRealGuess = true): boolean {
-    if (this.gameOver) {
-      return this.gameOver;
+    if (this.gameOver || this.spymasterView) {
+      return false;
     }
 
     const boxLocation = this.boxes.findIndex((boxObj) => boxObj === box);
@@ -157,7 +157,7 @@ export default class {
     }
 
     this.updateScore();
-    return this.gameOver;
+    return !this.gameOver;
   }
 
   private determineTurnChange(boxType: string): void {
