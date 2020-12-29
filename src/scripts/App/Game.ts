@@ -120,7 +120,7 @@ export default class {
   }
 
   determineWinner(box: Box, isRealGuess = true): boolean {
-    if (this.gameOver || this.spymasterView) {
+    if (this.gameOver || (this.spymasterView && isRealGuess)) {
       return false;
     }
 
