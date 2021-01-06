@@ -40,7 +40,6 @@ export default class {
       })
       .catch((error) => {
         console.log(error);
-        alert('Something went wrong, please reload the page!');
       })
       .finally(() => {
         const backdrop = document.getElementById('backdrop') as HTMLDivElement;
@@ -81,6 +80,7 @@ export default class {
     if (this.round !== data.round) {
       this.gameData = data;
       this.reset();
+      // TODO: update spymaster button and remove .active clas
     }
 
     this.turn = data.turn;
