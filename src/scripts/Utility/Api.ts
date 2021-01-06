@@ -11,7 +11,7 @@ export interface GameData {
 
 declare const API_URL: string;
 
-export default class {
+export default class Api {
   private apiUrl: string = API_URL;
   private headers = {
     'Content-Type': 'application/json',
@@ -22,6 +22,19 @@ export default class {
 
   setLang(lang: string): void {
     this.headers['Accept-Language'] = lang;
+  }
+
+  private getDataFromResponse(responseData: any): GameData {
+    return {
+      gameId: responseData.id,
+      round: responseData.round,
+      lang: responseData.lang,
+      turn: responseData.turn,
+      steps: responseData.steps,
+      wordSet: responseData.wordSet,
+      layout: responseData.layout,
+      revealed: responseData.revealed,
+    };
   }
 
   async guess(boxLocation: number): Promise<Record<string, unknown>> {
@@ -55,37 +68,19 @@ export default class {
     await response.json();
   }
 
-  async newGame(): Promise<GameData> {
-    const url = `${this.apiUrl}/new-game/${this.gameId}`;
+  async newGame(reset = true): Promise<GameData> {
+    const url = reset
+      ? `${this.apiUrl}/reset-game/${this.gameId}`
+      : `${this.apiUrl}/new-game/${this.gameId}`;
     const response = await fetch(url, { method: 'POST', headers: this.headers });
     const responseData = await response.json();
-    const data: GameData = {
-      gameId: responseData.id,
-      round: responseData.round,
-      lang: responseData.lang,
-      turn: responseData.turn,
-      steps: responseData.steps,
-      wordSet: responseData.wordSet,
-      layout: responseData.layout,
-      revealed: responseData.revealed,
-    };
-    return data;
+    return this.getDataFromResponse(responseData);
   }
 
   async gameState(): Promise<GameData> {
     const url = `${this.apiUrl}/game-state/${this.gameId}`;
     const response = await fetch(url, { headers: this.headers });
     const responseData = await response.json();
-    const data: GameData = {
-      gameId: responseData.id,
-      round: responseData.round,
-      lang: responseData.lang,
-      turn: responseData.turn,
-      steps: responseData.steps,
-      wordSet: responseData.wordSet,
-      layout: responseData.layout,
-      revealed: responseData.revealed,
-    };
-    return data;
+    return this.getDataFromResponse(responseData);
   }
 }
