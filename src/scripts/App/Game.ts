@@ -115,18 +115,18 @@ export default class {
     scoreEl.textContent = `Red: ${this.redCount} vs Blue: ${this.blueCount}`;
   }
 
-  private newGame(doReset = true): void {
-    this.api.newGame(doReset).then((data: GameData) => {
+  private newGame(forceNewGame: boolean): void {
+    this.api.newGame(forceNewGame).then((data: GameData) => {
       this.gameData = data;
       this.reset();
     });
   }
 
-  newGameHandler(langSelect: HTMLSelectElement, doReset = true): void {
+  newGameHandler(langSelect: HTMLSelectElement, forceNewGame: boolean): void {
     const lang = langSelect.value;
     this.lang = lang;
     this.api.setLang(lang);
-    this.newGame(doReset);
+    this.newGame(forceNewGame);
   }
 
   determineWinner(box: Box, isRealGuess = true): boolean {

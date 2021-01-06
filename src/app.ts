@@ -14,10 +14,10 @@ class App {
 
     const game = new Game(gameId);
     const langSelect = document.getElementById('language-selector') as HTMLSelectElement;
-    langSelect.addEventListener('change', game.newGameHandler.bind(game, langSelect, false));
+    langSelect.addEventListener('change', game.newGameHandler.bind(game, langSelect, true));
 
     const resetBtn = document.getElementById('reset') as HTMLButtonElement;
-    resetBtn.addEventListener('click', game.newGameHandler.bind(game, langSelect, true));
+    resetBtn.addEventListener('click', game.newGameHandler.bind(game, langSelect, false));
 
     const endTurnBtn = document.getElementById('end-turn') as HTMLButtonElement;
     endTurnBtn.addEventListener('click', game.changeTurns.bind(game, true));

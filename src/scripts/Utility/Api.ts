@@ -68,10 +68,10 @@ export default class Api {
     await response.json();
   }
 
-  async newGame(reset = true): Promise<GameData> {
-    const url = reset
-      ? `${this.apiUrl}/reset-game/${this.gameId}`
-      : `${this.apiUrl}/new-game/${this.gameId}`;
+  async newGame(forceNewGame: boolean): Promise<GameData> {
+    const url = forceNewGame
+      ? `${this.apiUrl}/new-game/${this.gameId}`
+      : `${this.apiUrl}/reset-game/${this.gameId}`;
     const response = await fetch(url, { method: 'POST', headers: this.headers });
     const responseData = await response.json();
     return this.getDataFromResponse(responseData);
